@@ -1,0 +1,148 @@
+\documentclass{article}
+\usepackage{amsmath} % equation, align, matrix, *, &, \\, \left, \right
+\usepackage{graphicx} % figure
+\usepackage{subcaption} % subfigure
+\usepackage{comment} % To comment
+\usepackage{hyperref} % To hyperlink and ref
+\usepackage{enumitem} % To list
+\usepackage[utf8]{inputenc}
+\usepackage{wrapfig}
+\usepackage{ulem}
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\usepackage{subfiles} %multifile latex projects
+\usepackage{multirow}
+\usepackage{booktabs}
+
+\graphicspath{{images/}{../images/}}
+
+\bibliography{lib} 
+
+\title{Idea de proyecto}
+\author{Tim Reiprich \\ Tegshigzugder Otgonbayar \\ Maltagliati Luca}
+
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+%\subsubsection{}
+
+%\paragraph{}
+%\subparagraph{}
+
+\pagestyle{plain}
+\pagenumbering{gobble} %hide page numbers
+
+\paragraph*{Project: Height / capacity monitor}\mbox{}\\
+
+\begin{comment}
+
+Using an ultrasonic sensor or similar, monitor the height of a water tank, paper stack, garbage container, or similar. Think of multiple sensors to map the height in different positions of the container or different containers. To properly manage the filling / emptying of the container, monitoring the tank capacity, etc. Local warning by LEDs, minimum / maximum level alarms, etc.
+
+The context and general description of the device to be designed
+Basic scheme of system hardware (components and what information they exchange)
+Summary of system operation
+List of things you have to do to carry out the project, identifying what you know how to do and what you don't. 
+Possible extensions
+
+\end{comment}
+
+\section{Context and general description of the device}
+
+Our project focuses on the measurement of containers holding some kind of
+liquid. Based on the volume of these containers alarms can be sent to the users
+to notify them about the amount. To accomplish this, sensors will be used, that
+can determine if the height of the volume is above or below a certain
+threshold. \par
+
+\subsection{Hardware scheme}
+
+The basic scheme of system hardware is described as follows: the main components
+are the micro-controller as central server, the sensors and a web-page. The
+sensors must be able to connect to the servers by a WiFi-connection and for this
+we assume that the connection is robust and will be available in the given
+environment.  \par
+
+\subsection{Sensor}
+We will use an ultrasonic sensor to measure the level of the liquid. \\
+A good example could be the sensor \textit{Ultrasonic Sensor Module HC-SR-04 by
+  Robokart}. We chose this approach because it is one of the best ways to sense
+proximity and detect levels with high reliability. \\ 
+
+Every sensor is connected to a micro-controller that collects the data and sends
+them to the central server via WiFi. \\ 
+
+Every container will have a micro-controller connected to one or more sensors.
+Certain specified heights of minimal and maximal volumes will be set, depending
+on various factors, like the position of the container, the probability of it to
+be used, the type of liquid filled in and others.
+
+\subsection{Central server}
+
+We suppose the existence of a LAN network to which controllers and central
+server are connected. This lets the micro-controllers communicate with the
+central server, sending it continuously the measurements of the liquid
+heights. \\
+
+The central server will perform control on the thresholds and, in case of need,
+will send an alert to the user. \\ 
+
+The central server could also host a web-page (for example developed with
+Node-RED framework) in which all the data are visualized in diagrams in a
+user-friendly interface, to let it be usable also by non-technical people. \\
+
+
+\section{Steps of the project}
+
+The first steps of the project will be to research about similar projects and
+identifying platforms, programming languages and frameworks, choosing
+the most suitable ones for our case.
+Furthermore, the connection between devices
+plays a crucial role, so we need to know what kind of protocols are needed. \par
+
+Possible extensions are to also give specific numbers of the height of the
+containers, how much volume they contain. \\
+
+It is also possible to set up LEDs; their light will warn about specific
+situations, e.g. when a container is empty a green light is shown, a red one when
+is full.
+
+\begin{comment}
+
+\maketitle
+\newpage
+
+\pagenumbering{arabic} %show page numbers in arabic
+\tableofcontents % from the section headings
+\newpage
+
+\listoffigures
+ 
+\listoftables
+
+%\listoftables
+\newpage
+
+\subfile{einleitung/einleitung}
+\newpage
+
+\subfile{grundlagen/grundlagen}
+\newpage
+
+\subfile{analyse/analyse}
+\newpage
+
+\printbibliography
+
+\subfile{entwicklung/entwicklung}
+\newpage
+
+\subfile{evaluation/evaluation}
+\newpage
+
+\subfile{zusammenfassungundausblick/zusammenfassungundausblick}
+\newpage
+
+\end{comment}
+
+\end{document}
