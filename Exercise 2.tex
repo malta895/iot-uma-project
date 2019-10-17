@@ -12,6 +12,7 @@
 \usepackage{subfiles} %multifile latex projects
 \usepackage{multirow}
 \usepackage{booktabs}
+\usepackage{placeins} %FloatBarrier
 
 \graphicspath{{images/}{../images/}}
 
@@ -57,12 +58,18 @@ threshold. \par
 
 \subsection{Hardware scheme}
 
+\begin{figure}
+\label{scheme}
+\includegraphics[scale=4]{pic/circuit.png}
+\caption{hardware scheme}
+\end{figure}
+
 The basic scheme of system hardware is described as follows: the main components
 are the micro-controller as central server, the sensors and a web-page. The
 sensors must be able to connect to the servers by a WiFi-connection and for this
 we assume that the connection is robust and will be available in the given
 environment.  \par
-
+\FloatBarrier
 \subsection{Sensor}
 We will use an ultrasonic sensor to measure the level of the liquid. \\
 A good example could be the sensor \textit{Ultrasonic Sensor Module HC-SR-04 by
