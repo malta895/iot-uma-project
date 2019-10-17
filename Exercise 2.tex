@@ -60,44 +60,35 @@ threshold. \par
 
 \begin{figure}
 \label{scheme}
-\includegraphics[scale=4]{pic/circuit.png}
-\caption{hardware scheme}
+\includegraphics[scale=3.5]{images/circuit.png}
+\caption{Hardware scheme}
 \end{figure}
 
 The basic scheme of system hardware is described as follows: the main components
 are the micro-controller as central server, the sensors and a web-page. The
 sensors must be able to connect to the servers by a WiFi-connection and for this
 we assume that the connection is robust and will be available in the given
-environment.  \par
+environment. \par
 \FloatBarrier
 \subsection{Sensor}
-We will use an ultrasonic sensor to measure the level of the liquid. \\
-A good example could be the sensor \textit{Ultrasonic Sensor Module HC-SR-04 by
-  Robokart}. We chose this approach because it is one of the best ways to sense
-proximity and detect levels with high reliability. \\ 
+We will use an ultrasonic sensor to measure the level of the liquid. An example of the sensor is \textit{Ultrasonic Sensor Module HC-SR-04 by Robokart}. 
+We want to choose this approach because it is one of the best ways to sense proximity and detect levels with high reliability. Every sensor is connected to a microcontroller 
+that collects the data and sends them to the central server via WiFi.  
 
-Every sensor is connected to a micro-controller that collects the data and sends
-them to the central server via WiFi. \\ 
-
-Every container will have a micro-controller connected to one or more sensors.
+Every container will have a microcontroller that is connected to at least one sensor. 
 Certain specified heights of minimal and maximal volumes will be set, depending
-on various factors, like the position of the container, the probability of it to
-be used, the type of liquid filled in and others.
+on various factors, like the position of the container, the probability of it being used, 
+the liquid type and as such.
 
 \subsection{Central server}
 
-We suppose the existence of a LAN network to which controllers and central
-server are connected. This lets the micro-controllers communicate with the
-central server, sending it continuously the measurements of the liquid
-heights. \\
+We assume a LAN network to which the controllers and central
+server are connected. Through this the microcontrollers will be able to communicate with the
+central server by sending continuously the measurements of the liquid heights. 
+The central server will perform checks on the thresholds and if needed send an alert to the user. 
 
-The central server will perform control on the thresholds and, in case of need,
-will send an alert to the user. \\ 
-
-The central server could also host a web-page (for example developed with
-Node-RED framework) in which all the data are visualized in diagrams in a
-user-friendly interface, to let it be usable also by non-technical people. \\
-
+The central server can also host a web page (e.g. with the Node-RED framework) in which the data are visualized in diagrams. 
+This will be in an user-friendly interface, for it to be usable by non-technical people also.
 
 \section{Steps of the project}
 
@@ -105,11 +96,10 @@ The first steps of the project will be to research about similar projects and
 identifying platforms, programming languages and frameworks, choosing
 the most suitable ones for our case.
 Furthermore, the connection between devices
-plays a crucial role, so we need to know what kind of protocols are needed. \par
+plays a crucial role, so we need to know what kind of protocols are needed.
 
 Possible extensions are to also give specific numbers of the height of the
-containers, how much volume they contain. \\
-
+containers, how much volume they contain.
 It is also possible to set up LEDs; their light will warn about specific
 situations, e.g. when a container is empty a green light is shown, a red one when
 is full.
