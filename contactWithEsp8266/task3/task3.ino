@@ -6,6 +6,7 @@
 
  - Se conecta a la WiFi y al servidor de mensajes (broker) MQTT
  - Cada X segundos envía al topic master/holamundo un mensaje con el identificador ESP_#######
+
  - El LED se apaga con cada envío
  - Comprobar en el monitor serie los mensajes  de depuración
  - Comprobar en el IU de node-red que llegan los mensajes 
@@ -24,13 +25,13 @@ const char* password = "malagaiot";
 const char* mqtt_server = "iot.ac.uma.es";
 const char* mqtt_user = "master";
 const char* mqtt_pass = "malagaiot";
-const char* mqtt_topic = "master/holamundo";
-const char* mqtt_temperature = "master/temperatura/GRUPO_K";
-const char* mqtt_humidity = "master/humedad/GRUPO_K";
-char mqtt_cliente[50];
 
-char temp[10];
-char hum[10];
+//TOPICS
+const char* mqtt_dispositivo = "master/GRUPO_K/dispositivo";
+const char* mqtt_order = "master/GRUPO_K/orden";
+const char* mqtt_estado = "master/GRUPO_K/estado";
+
+char mqtt_cliente[50];
 
 DHTesp dht;
 
@@ -39,19 +40,43 @@ DHTesp dht;
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-#define INTERVALO 20000
-long lastMsg = -INTERVALO;
+int ledStatus = 0; //0 apaga, 1 enciende, 2 alterna
+
+void callback(const char* topic, byte* payload, unsigned int length) {
+
+  if(strncmp("enciende", (char*)payload, 8) == 0){
+    ledStatus = 1;
+    Serial.println((char*)payload);
+    client.publish(mqtt_estado, "ON", true);
+  } else if(strncmp("apaga", (char*)payload, 5) == 0) {
+    ledStatus = 0;
+    Serial.println((char*)payload);
+    client.publish(mqtt_estado, "OFF", true);
+  } else if(strncmp("alterna", (char*)payload, 7) == 0) {
+    ledStatus = 2;
+    Serial.println((char*)payload);
+
+  } else {
+    //error
+    Serial.print("Message: ");
+      Serial.print((char*)payload);
+      Serial.print(" not recognized!");
+  }
+}
 
 void setup() {
   pinMode(LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
-  
+
   client.setServer(mqtt_server, 1883);
   snprintf(mqtt_cliente, 50, "ESP_%d", ESP.getChipId());
   Serial.print("Mi ID es "); Serial.println(mqtt_cliente);
 
    dht.setup(5, DHTesp::DHT11); // Connect DHT sensor to GPIO 5
+
+
+
 }
 
 void setup_wifi() {
@@ -73,6 +98,7 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
 }
 
 void reconnect() {
@@ -80,10 +106,18 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect(mqtt_cliente, mqtt_user, mqtt_pass)) {
+    if (client.connect(mqtt_cliente, mqtt_user, mqtt_pass, mqtt_dispositivo, 0, 1, "Desconectado")) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      
+
+      if(client.subscribe(mqtt_order)){
+        Serial.println("Subscribed succesfully!");
+      } else {
+        Serial.println("Error subscribing!");
+      }
+
+      client.setCallback(callback);
+
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -101,31 +135,30 @@ void loop() {
   client.loop();
 
   long now = millis();
-  if (now - lastMsg > INTERVALO) {
-    lastMsg = now;
-    Serial.print("Mensaje publicado: ");  Serial.println(mqtt_cliente);
-    Serial.print("En topic: ");  Serial.println(mqtt_topic);
-    client.publish(mqtt_topic, mqtt_cliente);
-    digitalWrite(LED,HIGH); delay(200); digitalWrite(LED,LOW);
 
-  float humidity = dht.getHumidity();
-  dtostrf(humidity, 5, 5, hum);
-  client.publish(mqtt_humidity, hum);
-  float temperature = dht.getTemperature();
-  dtostrf(temperature, 5, 5, temp);
-  client.publish(mqtt_temperature, temp);
-
-  Serial.print(dht.getStatusString());
-  Serial.print("\t");
-  Serial.print(humidity, 1);
-  Serial.print("\t\t");
-  Serial.print(temperature, 1);
-  Serial.print("\t\t");
-  Serial.print(dht.toFahrenheit(temperature), 1);
-  Serial.print("\t\t");
-  Serial.print(dht.computeHeatIndex(temperature, humidity, false), 1);
-  Serial.print("\t\t");
-  Serial.println(dht.computeHeatIndex(dht.toFahrenheit(temperature), humidity, true), 1);
-  delay(2000);
+  switch(ledStatus){
+  case 0:
+    digitalWrite(LED, HIGH);
+    break;
+  case 1:
+    digitalWrite(LED, LOW);
+    break;
+  case 2:
+    digitalWrite(LED,HIGH);
+    client.publish(mqtt_estado, "OFF", true);
+    delay(200);
+    digitalWrite(LED,LOW);
+    client.publish(mqtt_estado, "ON", true);
+    break;
+  default:
+    Serial.println("LED status not recognized");
+    break;
   }
+
+  //Send retained "available" message
+  client.publish(mqtt_dispositivo, "Disposable", true);
+
+
+  delay(200);
+
 }
