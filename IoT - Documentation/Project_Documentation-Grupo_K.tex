@@ -20,11 +20,14 @@
 
 \bibliography{lib} 
 
-\title{Project Documentation}
-\author{Grupo K}
-
+\title{Documentation of Project: \\Height / capacity monitor}
+\author{Grupo K: \\ Tim Reiprich \\ Tegshigzugder Otgonbayar \\ Maltagliati Luca}
 
 \begin{document}
+
+\pagestyle{plain}
+\pagenumbering{gobble} %hide page numbers
+
 \maketitle
 %\section{}
 %\subsection{}
@@ -33,12 +36,21 @@
 %\paragraph{}
 %\subparagraph{}
 
-\pagestyle{plain}
-\pagenumbering{gobble} %hide page numbers
+\newpage
+
+\textcolor{red}{\textbf{\hl{This documentation will be updated until the final delivery.}}}
+
+\pagenumbering{arabic} %show page numbers in arabic
+\tableofcontents % from the section headings
+\newpage
+
+%\listoffigures
+%\listoftables
+%\newpage
 
 %\paragraph*{Lectura 1.- Capítulo 1 de Michael Miller (2015), "The Internet of Things: How Smart TVs, Smart Cars, Smart Homes, and Smart Cities Are Changing the World" , Que}\mbox{}\\
 
-\paragraph*{Project: Height / capacity monitor}\mbox{}\\
+%\paragraph*{Project: Height / capacity monitor}\mbox{}\\
 
 \textcolor{red}{\textbf{\hl{Context and general summary of the operation of the system}}}
 
@@ -52,7 +64,7 @@ threshold. \par
 
 \subsection{Hardware scheme}
 
-\begin{figure}
+\begin{figure}[h]
 \label{scheme}
 \hspace{-1cm}
 \includegraphics[scale=0.325]{images/circuit3.png}
@@ -75,7 +87,7 @@ Certain specified heights of minimal and maximal volumes will be set, depending
 on various factors, like the position of the container, the probability of it being used, 
 the liquid type and as such.
 
-\begin{figure}
+\begin{figure}[h]
 \includegraphics[scale=0.5]{sensorAndArduino.jpg}
 \caption{Example of a sensor connected to a microcontroller}
 \label{sensorWithArduino}
@@ -108,24 +120,34 @@ is full.
 \textcolor{red}{\textbf{\hl{Complete list of components that will be used, with a short description and why}}}
 
 List of ordered components
-NodeMCU DevKit v1.0 development board (ESP8266) - we will use the microcontroller connected to sensor collects and sends data to broker
+\begin{itemize}
+\item NodeMCU DevKit v1.0 development board (ESP8266) - we will use the microcontroller connected to sensor collects and sends data to broker
 %Arduino UNO development board - 
-Infrared proximity sensor (digital / analog output module) - the main sensor to measure the height of the object
-Rechargeable battery - power source for the microcontroller and sensor
-Battery charge controller - for the battery
-Small materials: 
-	cables - to connect sensor and microcontroller
-	breadboard - to connect sensor and microcontroller
-	LEDs - to signal certain thresholds
-	%push button - a button is always useful
+\item Infrared proximity sensor (digital / analog output module) - the main sensor to measure the height of the object
+\item Rechargeable battery - power source for the microcontroller and sensor
+\item Battery charge controller - for the battery
+\item Small materials: 
+	\begin{itemize}
+		\item cables - to connect sensor and microcontroller
+		\item breadboard - to connect sensor and microcontroller
+		\item LEDs - to signal certain thresholds
+		%push button - a button is always useful
+	\end{itemize}
+\end{itemize}
 
 \textcolor{red}{\textbf{\hl{Complete wiring scheme }}} - will be documented during the implementation 
 \begin{itemize}
-	  \item Flowchart of operation  
-	  \item Another entry in the list
-	  \item List of functions used to communicate with the sensors, including input / output parameters and operation.
-	  \item List of functions that will be used to communicate with the base station, including input / output parameters and operation. 
-	  \item Other functions necessary for device operation
+	 \item Flowchart of operation  
+	\begin{figure}[h]
+		\center
+		\includegraphics[scale=1]{flow.png}
+		\caption{Example of a sensor connected to a microcontroller}
+		\label{sensorWithArduino}
+	\end{figure}
+	\item Another entry in the list
+	\item List of functions used to communicate with the sensors, including input / output parameters and operation.
+	\item List of functions that will be used to communicate with the base station, including input / output parameters and operation. 
+	\item Other functions necessary for device operation
 	\item Other technical considerations of the devices not described above. 
 \end{itemize}
 	
