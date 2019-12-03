@@ -9,6 +9,9 @@
 #define trigPin D0   //define la salida por donde se manda el trigPin
 #define echoPin D1 //define la salida por donde se recibe el echoPin
 
+#define LED_UPPER_THRESHOLD D2 //this led is on when the upper threshold is trespassed
+#define LED_LOWER_THRESHOLD D3 // this led is on when the lower threshold is trespassed
+
 int distance;  //crea la variable "distance"
 float tiempo;  //crea la variable tiempo (como float)
 
@@ -21,6 +24,12 @@ const char* mqtt_pass = "malagaiot";
 
 //TOPICS
 const char* mqtt_distance = "master/GRUPO_K/distance";
+const char* mqtt_threshold = "master/GRUPO_K/threshold";
+
+
+//LED VARIABLES
+boolean led_lower_on = true;
+boolean led_upper_on = true;
 
 char mqtt_cliente[50];
 
@@ -34,6 +43,10 @@ void setup()
   //Initialize Sensor pins
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
+
+  //initialize the LEDs outputs
+  pinMode(LED_LOWER_THRESHOLD, OUTPUT);
+  pinMode(LED_UPPER_THRESHOLD, OUTPUT);
 
   setup_wifi();
 
@@ -65,6 +78,21 @@ void setup_wifi() {
 
 }
 
+//called when receiving data from the subsribed topic
+void callback(const char* topic, byte* payload, unsigned int length) {
+
+  const char* payload_string = (char*) payload;
+
+  //parse the JSON and turn on the corresponding LED
+
+  /* {"topic":"master/GRUPO_K/distance","payload":"{\"highLed\":true,\"lowLed\":false}","qos":0,"retain":false,"_msgid":"b48164d7.c3b248"} */
+
+  //led_upper_on = payload.highLed
+  //led_lower_on = payload.lowLed
+
+
+}
+
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
@@ -74,15 +102,17 @@ void reconnect() {
       Serial.println("connected");
       // Once connected, publish an announcement...
 
-      client.publish(mqtt_distance, "Ciao", true);
+      client.publish(mqtt_distance, "Connected!", true);
 
-      /* if(client.subscribe(mqtt_order)){ */
-      /*   Serial.println("Subscribed succesfully!"); */
-      /* } else { */
-      /*   Serial.println("Error subscribing!"); */
-      /* } */
+      //subscribe to topics:
 
-      /* client.setCallback(callback); */
+      if(client.subscribe(mqtt_threshold)) {
+        Serial.println("Subscribed succesfully!");
+      } else {
+        Serial.println("Error subscribing!");
+      }
+
+      client.setCallback(callback);
 
     } else {
       Serial.print("failed, rc=");
@@ -101,6 +131,13 @@ void loop()
     reconnect();
   }
   client.loop();
+
+  digitalWrite(LED_LOWER_THRESHOLD,
+               led_lower_on ? HIGH : LOW);
+
+  digitalWrite(LED_UPPER_THRESHOLD,
+               led_upper_on ? HIGH : LOW);
+
 
   digitalWrite(trigPin,LOW); //Por cuestión de estabilización del sensor
   delayMicroseconds(5);
