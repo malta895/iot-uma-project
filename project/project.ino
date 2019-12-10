@@ -5,6 +5,7 @@
 
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <ArduinoJson.h>
 
 #define trigPin D0   //define la salida por donde se manda el trigPin
 #define echoPin D1 //define la salida por donde se recibe el echoPin
@@ -26,10 +27,12 @@ const char* mqtt_pass = "malagaiot";
 const char* mqtt_distance = "master/GRUPO_K/distance";
 const char* mqtt_threshold = "master/GRUPO_K/threshold";
 
-
 //LED VARIABLES
-boolean led_lower_on = true;
-boolean led_upper_on = true;
+boolean led_lower_on = false;
+boolean led_upper_on = false;
+
+//BASKET HEIGHT
+double basket_height = 50.;
 
 char mqtt_cliente[50];
 
@@ -81,15 +84,44 @@ void setup_wifi() {
 //called when receiving data from the subsribed topic
 void callback(const char* topic, byte* payload, unsigned int length) {
 
-  const char* payload_string = (char*) payload;
+
+  //FIX OVERFLOW malloc(length+1)
+  strncpy(topic_json, (char*) payload, length);
+
+  Serial.printf("%s\n", topic_json);
 
   //parse the JSON and turn on the corresponding LED
 
-  /* {"topic":"master/GRUPO_K/distance","payload":"{\"highLed\":true,\"lowLed\":false}","qos":0,"retain":false,"_msgid":"b48164d7.c3b248"} */
+  DynamicJsonDocument topic_json_document(length*4);
 
-  //led_upper_on = payload.highLed
-  //led_lower_on = payload.lowLed
+  DeserializationError error = deserializeJson(topic_json_document, topic_json);
 
+  //Handle error and show debug messages
+  if(error) {
+    Serial.printf("ERROR: Invalid JSON input from topic: <%s>\n", topic);
+    Serial.println(error.c_str());
+    return;
+  }
+
+  //turn on or off LEDs accordingly, show debug info
+  led_upper_on = topic_json_document["highLed"];
+  led_lower_on = topic_json_document["lowLed"];
+
+  digitalWrite(LED_LOWER_THRESHOLD,
+               led_lower_on ? HIGH : LOW);
+
+  Serial.printf("Lower threshold overtaken: %d\n", led_lower_on);
+
+  digitalWrite(LED_UPPER_THRESHOLD,
+               led_upper_on ? HIGH : LOW);
+
+  Serial.printf("Upper threshold overtaken: %d\n", led_upper_on);
+
+  //get the basket height
+  if(!topic_json_document["basketHeight"].isNull()){
+    basket_height = topic_json_document["basketHeight"];
+    Serial.printf("Basket height: %s cm\n", basket_height);
+  }
 
 }
 
@@ -131,13 +163,6 @@ void loop()
     reconnect();
   }
   client.loop();
-
-  digitalWrite(LED_LOWER_THRESHOLD,
-               led_lower_on ? HIGH : LOW);
-
-  digitalWrite(LED_UPPER_THRESHOLD,
-               led_upper_on ? HIGH : LOW);
-
 
   digitalWrite(trigPin,LOW); //Por cuestión de estabilización del sensor
   delayMicroseconds(5);
