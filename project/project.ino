@@ -39,6 +39,10 @@ char mqtt_cliente[50];
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+//TIME
+unsigned long time_wifi;
+
+
 void setup()
 {
   Serial.begin(9600);  //Serial port
@@ -52,6 +56,10 @@ void setup()
   pinMode(LED_UPPER_THRESHOLD, OUTPUT);
 
   setup_wifi();
+
+  time_wifi = millis();
+
+  printf("WiFi connected after %d ms\n", time_wifi);
 
   client.setServer(mqtt_server, 1883);
   snprintf(mqtt_cliente, 50, "ESP_%d", ESP.getChipId());
@@ -74,6 +82,8 @@ void setup_wifi() {
     Serial.print(".");
   }
 
+
+
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
@@ -84,9 +94,14 @@ void setup_wifi() {
 //called when receiving data from the subsribed topic
 void callback(const char* topic, byte* payload, unsigned int length) {
 
+  char *topic_json = (char*) malloc(length + 1); // + 1 because we need to put the \0 at the end
 
-  //FIX OVERFLOW malloc(length+1)
-  strncpy(topic_json, (char*) payload, length);
+  for(unsigned int i=0;i<=length;i++){
+    if(i == length)
+      topic_json[i] = '\0';
+    else
+      topic_json[i] = (char) payload[i];
+  }
 
   Serial.printf("%s\n", topic_json);
 
@@ -95,6 +110,8 @@ void callback(const char* topic, byte* payload, unsigned int length) {
   DynamicJsonDocument topic_json_document(length*4);
 
   DeserializationError error = deserializeJson(topic_json_document, topic_json);
+
+
 
   //Handle error and show debug messages
   if(error) {
@@ -119,9 +136,12 @@ void callback(const char* topic, byte* payload, unsigned int length) {
 
   //get the basket height
   if(!topic_json_document["basketHeight"].isNull()){
-    basket_height = topic_json_document["basketHeight"];
-    Serial.printf("Basket height: %s cm\n", basket_height);
+    basket_height = (float) topic_json_document["basketHeight"];
+    Serial.printf("Basket height: %f cm\n", basket_height);
   }
+
+  free(topic_json); // we read the string, we can now free the memory
+  topic_json = NULL;
 
 }
 
@@ -180,10 +200,15 @@ void loop()
   Serial.print(distance);
   Serial.println(" cm");
 
-  char distance_str[16];
+  if(distance <= basket_height){ //filter out anomalous values (sensor sometimes gives them)
+    char distance_str[16];
 
-  itoa(distance, distance_str, 10);
-  client.publish(mqtt_distance, distance_str, true);
+    itoa(distance, distance_str, 10);
+    client.publish(mqtt_distance, distance_str, true);
+  } else {
+    printf("Anomalous value: %d cm\n", distance);
+    printf("Basket height is set to: %f cm\n", basket_height);
+  }
 
-  delay(3000);
+  delay(500);
 }
