@@ -26,9 +26,10 @@
 
 \begin{frame}{Overview}
 \begin{itemize}
-\item measure height using an ultrasonic sensor
-\item send data to node-red
+\item measure height using an ultrasonic sensor and send it to central computer
 \item show if certain thresholds (low/high) are surpassed at basket and central computer using LEDs and noe-red
+\item thresholds can be dynamically set using the Node-Red interface and are sent to the ESP connected to the sensor
+\item
 \end{itemize}
 \end{frame}
 
@@ -42,6 +43,18 @@ add interface here (or points you want to say)
 
 \begin{frame}{Show Code}
 explain important functions of written cod
+\end{frame}
+
+\begin{frame}{Limitation}
+\begin{itemize}
+\item measurement fluctuations of the sensor $\to$ not reasonable values have to be filtered
+\item needs constant Wifi connection between central computer and ESP to recognize thresholds
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\center
+\huge{Thanks for your attention!}
 \end{frame}
 
 \end{document}
