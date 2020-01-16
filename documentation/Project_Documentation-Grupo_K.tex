@@ -52,9 +52,14 @@
 
 %\paragraph*{Project: Height / capacity monitor}\mbox{}\\
 
-\textcolor{red}{\textbf{\hl{Context and general summary of the operation of the system}}}
-
 \section{Introduction}
+
+In the project of the course Internet of Things we are to implement a device, that could be somewhat used in an environment. For this project we chose from the possible project ideas the Height / capacity monitor. We picked this idea, because it was interesting to see how it could be implemented and used in the field. Especially as we could think of certain sceneries, where it can be used efficiently such as, in household, for example where there are children to have such a sensor and turn the water off or even send a notification. In industrial area probably for indicators of highly valuable liquid. --- must be reformulated
+
+Our task was to create this device and also make it possible to connect with other 
+For an inexpensive implementation we worked with Arduino UNO. There for the connections we used Node-RED and Arduino IDE.
+
+\textcolor{red}{\textbf{\hl{Context and general summary of the operation of the system}}}
 
 \section{Context and general description of the device}
 
@@ -174,14 +179,24 @@ List of ordered components
 \end{itemize}
 
 \subsection{Node-RED}
-x
 
-\subsection{Arduino}
+In the figure \ref{inteface_offline} you can see .
+
+\begin{figure}[]
+	\centering
+	\includegraphics[scale=0.2]{images/interface_offline_2.png}
+	\caption{NODE-Red: Interface offline}	
+	\label{inteface_offline}
+\end{figure}
+\subsection{Arduino IDE}
 x
 
 \subsection{Experiments and Results}
 \section{Power Consumption}
-\begin{itemize}
+
+In the figure \ref{chart_power} you can see the chart of the power, that was taken in class.
+
+\begin{itemize}	
 \item graph of power consumption
 \item low consumption $\to$ esp starts, connects to Wifi, duration of startup variies
 \item high consumption $\to$ data is sent and received, spikes of constumption whenever data exchange happens
@@ -195,7 +210,12 @@ x
 	\label{chart_power}
 \end{figure}
 
+\newpage
+
 \section{Summary}
+Through this project we were able to learn certain difficulties and also advantages of the ... 
+There was new insight in how JSON BLA BLA 
+In the future it would be interesting to study the capability of interconnecting with other devices and creating a more broad network of devices. Obviously it makes sense to work with: ...
 
 \begin{comment}
 Project : Height / capacity monitor
