@@ -184,11 +184,11 @@ void loop()
   }
   client.loop();
 
-  digitalWrite(trigPin,LOW); //Por cuestión de estabilización del sensor
+  digitalWrite(trigPin,LOW); //Ensure the sensor is LOW at start up
   delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH); //envío del trigPin ultrasónico
+  digitalWrite(trigPin, HIGH); //send the ping
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+  digitalWrite(trigPin, LOW); //pong after 10ms
 
   pinMode(echoPin, INPUT);
   tiempo = pulseIn(echoPin, HIGH);
