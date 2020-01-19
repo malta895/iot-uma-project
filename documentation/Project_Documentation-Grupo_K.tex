@@ -138,10 +138,7 @@ next phase we planned the structure of the system and began to get familiar with
 the tools we wanted to use. After the planning was done we implemented the
 system and tested it afterwards to remove possibly found errors.\par
 
-\textcolor{red}{\textbf{\hl{Complete list of components that will be used, with
-      a short description and why}}}
-
-List of ordered components
+\subsection{List of used components}
 \begin{itemize}
 \item NodeMCU DevKit v1.0 development board (ESP8266) - we will use the
   microcontroller connected to sensor. It collects and sends data to broker and
@@ -159,32 +156,22 @@ List of ordered components
 		% push button - a button is always useful
 	\end{itemize}
 \end{itemize}
-
+\subsection{Wiring scheme}
+During the implementation of the system we used the setup seen in figure \ref{schema_bb}. We used batteries to power the system which makes it more flexible to use but results in downtimes when the batteries have to be changed. If a more stable system is desired the batteries can be exchanged with a permanent  connection to a power socket.
 \begin{figure}[]
 	\centering \includegraphics[scale=0.4]{images/schema_bb.png}
 	\caption{Hardware scheme}
 	\label{schema_bb}
 \end{figure}
-
-\textcolor{red}{\textbf{\hl{Complete wiring scheme }}} - will be documented
-during the implementation
-\begin{itemize}
-\item Flowchart of operation
-	\begin{figure}[h]
+\subsection{Flow chart of system functionality}
+Following the wiring scheme the execution flow was planned. As seen in figure \ref{flowChart} the parameters regarding the thresholds and the height of the basket the sensor is used in have to be set by the user at the beginning. Afterwards the system enters a loop  until its execution is stopped through a disconnect from the MQTT broker or a loss power supply.
+\begin{figure}[h]
 		\center \includegraphics[scale=0.6]{flowChart.png}
 		\caption{flow chart of the system}
-		\label{sensorWithArduino}
-	\end{figure}
-\item Another entry in the list
-	
-\end{itemize}
+		\label{flowChart}
+\end{figure}
 
-\textcolor{red}{\textbf{\hl{User manual:}}}
-\begin{itemize}
-\item System installation, specifications and calibration
-\item System use and maintenance manual
-\item Detection and solution of possible errors
-\end{itemize}
+
 
 \subsection{Node-Red}
 This section covers the parts of the project running on the central server which
@@ -219,7 +206,7 @@ The function node \enquote{Threshold Check} does the same checks as the previous
     \verb| basketHeight: context.basket}}| is returned where the property
 highLed or respectively lowLed is set to \enquote{true} if the corresponding
 threshold is surpassed. The last property always contains the currently set
-basket height. Afterwards this object is published to the topic
+basket height. This is needed because the ultrasonic sensor returns abnormal values at some times. So we use the \verb|basketHeight| to filter out all distance measurements higher than the height of the basket the sensor is used in as these are impossible and definitely false. Afterwards this object is published to the topic
 \enquote{threshold} as a JSON using MQTT. The microcontroller is subscribed to
 this topic and uses the received values to turn its connected LEDs on or off and
 to filter abnormal measured distances.\par
@@ -232,7 +219,7 @@ flow to determine if the LEDs have be turned off or on.\par
 And finally the two output nodes on the top are used to show the measured
 distances. The text node just shows the last measured distance in centimeters.
 The node called \enquote{Distance} is a graph of the measured distances which
-enables the user to see the tendencies in the liquid level and mybe act before
+enables the user to see the tendencies in the liquid level and act before
 the critical thresholds are exceeded.
 \subsubsection{User interface}
 The user interface (figure \ref{inteface_offline}) is structured in 3 parts. On
@@ -354,9 +341,15 @@ system becomes more efficient.
 
 \begin{figure}[]
 	\centering \includegraphics[scale=0.5]{images/chart.png}
-	\caption{Hardware scheme}
+	\caption{graph of power consumption (until 8 seconds after startup)}
 	\label{chart_power}
 \end{figure}
+\section{User manual and setup}
+The system can be set up in a few simple steps. The main prerequisite for a successful setup is a stable Wifi over which the MQTT messages can be sent to and received from the MQTT broker. The login has to be configured in the code for the microcontroller as well as for the Node-Red homepage.\par 
+Afterwards the microcontroller has to be connected to a power source and the ultrasonic sensor has to be fixed to the top of the container in which it's used pointing downwards towards the liquid stored in the basket. The rest of the hardware should be placed outside of the basket to prevent possible damage from the liquid and to make the warning LEDs easily visible.\par 
+As soon as the microcontroller is connected to a power supply it tries to connect to the given Wifi. If this is successful it starts measuring the height and sending the data to the MQTT broker. If Node-Red is running on the central server hosting our homepage it will start communicating with the MQTT broker as soon as the receiving and sending node are configured using the correct credentials.\par 
+Once this initial setup is done the system should be running and the thresholds and the basket height can be set or dynamically changed to use the full spectrum of features.\par 
+In case the microcontroller disconnects from the MQTT broker unexpectedly the message \verb|Desconectado| is shown instead of the last measured distance. In this case the established connection should be checked as well as the microcontroller at the basket because it may have lost power. In case the error is more complex the Arduino IDE can be used as the system does extensive logging.
 
 \newpage
 
