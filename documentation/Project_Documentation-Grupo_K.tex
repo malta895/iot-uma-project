@@ -39,9 +39,6 @@
 
 \newpage
 
-\textcolor{red}{\textbf{\hl{This documentation will be updated until the final
-      delivery.}}}
-
 \pagenumbering{arabic} %show page numbers in arabic
 \tableofcontents % from the section headings
 \newpage
@@ -49,69 +46,40 @@
 % \listoffigures \listoftables
 % \newpage
 
-% \paragraph*{Lectura 1.- Capítulo 1 de Michael Miller (2015), "The Internet of Things: How Smart TVs, Smart Cars, Smart Homes, and Smart Cities Are Changing the World" , Que}\mbox{}\\
-
-% \paragraph*{Project: Height / capacity monitor}\mbox{}\\
-
 \section{Introduction}
 
-In the project of the course Internet of Things we are to implement a device,
-that could be somewhat used in an environment. For this project we chose from
-the possible project ideas the Height / capacity monitor. We picked this idea,
-because it was interesting to see how it could be implemented and used in the
-field. Especially as we could think of certain sceneries, where it can be used
-efficiently such as, in household, for example where there are children to have
-such a sensor and turn the water off or even send a notification. In industrial
-area probably for indicators of highly valuable liquid. --- must be reformulated
-(maybe more industrial than household with children)
+In the project of the course Internet of Things we are to implement a device, that is capable of executing a specific task in a given environment. For this project we chose from the possible project ideas the height and capacity monitor. The selection of the idea was simple for us, as we were interested in a project, that has a practical usage in reality. There are certain sceneries such as: for example, in a household with children, to monitor the height and capacity of kitchen or restroom sinks. So in the case, that the water runs over, to turn it off or to notify the family. Also in industrial area cases such as: monitoring the amount of liquid to be poured in a container.
 
-Our task was to create this device and also make it possible to connect with
-other For an inexpensive implementation we worked with the ESP8266. During the
-development we used the Arduino IDE and to easily create an user interface
-Node-Red was used. \textcolor{red}{\textbf{\hl{Context and general summary of
-      the operation of the system}}}
+Our task was to develop such a device and document the procedures. During this project we worked intensively with the Arduino IDE and Node-RED.
 
-\section{Context and general description of the device}
+\section{General description}
 
-Our project focuses on the measurement of containers holding some kind of
-liquid. Based on the volume of these containers alarms can be sent to the users
-to notify them about the amount. To accomplish this, a sensor will be used, that
-can determine the height of the liquid in the container. Furthermore an upper
-and a lower threshold can be set by the user. If one of these is exceeded, an
-alarm in form of a LED at the sensor and a virtual LED in Node-Red goes off.\par
+Our project focuses on the measurement of containers holding some sort of liquid. Based on the volume of these containers alarms are sent to the users to notify them about the amount. To accomplish this, a sensor will be used, that determines the height of the liquid in the container. Furthermore an upper and a lower threshold will be set by the user. If a threshold is exceeded, an alarm, in form of a LED at the sensor and a virtual LED in Node-RED, will trigger.
 
 \subsection{Hardware scheme}
 
-\begin{figure}[h]
-  \hspace{-1cm} \includegraphics[scale=0.325]{images/circuit3.png}
-  \caption{Hardware scheme}
+\begin{figure}[]
+  \hspace{-1.5cm} \includegraphics[scale=0.325]{images/circuit3.png}
+  \caption{Draft of the scheme}
   \label{scheme}
 \end{figure}
 
-The basic scheme of system hardware is described as follows: the main components
-are a computer as central server, the sensors and a web-page. The sensors must
-be able to connect to the server via a WiFi-connection and for this we assume
-that the connection is robust and will be available in the given environment.
-The homepage is hosted on the central server and functions as the main way to
-interact with the system for the enduser. In theory it wouldn't be difficult to
-expand the system to function with multiple height sensors as seen in figure
-\ref{scheme}. But due to restrictions in available components we implemented
-only one sensor communicating with the central server in the final project.\par
+In this part we will discuss the basic scheme of the system hardware. The main components are:
+\begin{itemize}
+\item a computer as central server
+\item the sensors
+\item a webpage
+\end{itemize}
+The sensors must be able to connect to the server via a Wi-Fi connection. For this we assume a robust connection, that is available in the given environment. The homepage is hosted on the central server and is the main way to interact with the system for the end-user. Theoretically it should be straightforward to expand the system, so it functions with numerous amounts of height sensors as shown in the figure \ref{scheme}. To only showcase and due to the restriction of available components we will implement with a single sensor. This sensor communicates with the central server.
 
 \subsection{Sensor}
-We used an ultrasonic sensor to measure the level of the liquid. The one we
-used, is called Ultrasonic Sensor Module HC-SR-04 by Robokart. We want to choose
-this approach because it is one of the best ways to sense proximity and detect
-levels with high reliability. The sensor is connected to a microcontroller that
-collects the data and sends them to the central server via WiFi.
+To measure the height of the liquid we use an ultrasonic sensor called Ultrasonic Sensor Module HC-SR-04 by Robokart. We have chosen this approach because it is a simple and cheap way to sense the proximity and detect the capacity level. The sensor is connected to a microcontroller which
+collects data and via a Wi-Fi connection sent to the central server.
 
-Every container will have a microcontroller that is connected to at least one
-sensor (see figure \ref{sensorWithArduino}). Certain specified heights of
-minimal and maximal volumes can be set dynamically, depending on various
-factors, like the position of the container, the probability of it being used,
-the liquid type and as such.
+Each container will contain a microcontroller that is at least connected to one sensor, as shown in the figure \ref{sensorWithArduino}. Specified heights of minimal and maximal volumes can be set dynamically, depending on various factors such as: the position of the container, the probability of its usage and the type of liquid.
 
-\begin{figure}[h]
+\begin{figure}[]
+	\centering
   \includegraphics[scale=0.5]{sensorAndArduino.jpg}
   \caption{Example of a sensor connected to a microcontroller}
   \label{sensorWithArduino}
@@ -119,94 +87,79 @@ the liquid type and as such.
 
 \subsection{Central server}
 
-We assume a LAN or WLAN network to which the controllers and central server are
-connected. Through this the microcontrollers will be able to communicate with
-the central server by sending the measurements of the liquid heights
-continuously. The central server will perform checks on the thresholds curerntly
-set by the user and, if needed, will show an alarm on the homepage and send the
-alarm signal to the microcontroller connected to the sensor, so the alarm in
-form of the connected connected LEDs will be shown as well. This procedure and
-the corresponding homepage was configured using Node-Red.
+Through a LAN or WLAN network, to which the controllers and central server are
+connected, the microcontrollers will communicate with the central server by sending the measurements of the liquid heights continuously. Then the central server will perform checks on the current set thresholds of the user. If necessary it will show the alarm on the homepage and send the signal to the microcontroller, which are connected to the sensor. So the alarm, in form of the connected LEDs, will be triggered as well. This procedure and the corresponding homepage were configured in Node-RED.
 
-\section{Steps of the project}
+\section{Project}
 
-The first steps of the project consisted of research about similar projects and
-identifying platforms, programming languages and frameworks, choosing the most
-suitable ones for our case. Furthermore, the connection between devices plays a
-crucial role, so we needed to know what kind of protocols are needed. During the
-next phase we planned the structure of the system and began to get familiar with
-the tools we wanted to use. After the planning was done we implemented the
-system and tested it afterwards to remove possibly found errors.\par
+The first step of the project was to research about other similar projects and
+to identify platforms, programming languages and frameworks, to choose the best suited for our case. The connection between the devices plays a crucial role, so we needed to know what kind of protocols are crucial. In the next step we planned the structure of the system and began to familiarize with
+the tools we wanted to use. After the planning we implemented the system and tested it to remove possible errors.\par
 
-\subsection{List of used components}
+\subsection{Components}
+Here we have the components used for the project and their usages. These are:
 \begin{itemize}
 \item NodeMCU DevKit v1.0 development board (ESP8266) - we will use the
-  microcontroller connected to sensor. It collects and sends data to broker and
-  receives parameters to light up the warning LEDs correctly.
-\item Ultrasonic proximity sensor (digital / analog output module) - the main
-  sensor to measure the distance between liquid and sensor
-\item power source for the microcontroller and sensor (batteries, solar panel or
-  a similar source)
-\item Small materials:
+  microcontroller to connect to the sensor. It will collect and send data to the broker and
+  receive parameters to light the warning LEDs correctly.
+\item Ultrasonic proximity sensor (digital/analog output module) - the main
+  sensor to measure the distance to the liquid
+\item Power source for the microcontroller and sensor (batteries, solar panel or
+  similar source)
+\item Smaller materials:
 	\begin{itemize}
   \item cables - to connect sensor, microcontroller and LEDs
   \item breadboard - to connect sensor, microcontroller and LEDs
-  \item LEDs - to signal that level of liquid has exceeded height thresholds set
-    by the user
-		% push button - a button is always useful
+  \item LEDs - to signal an alarm
 	\end{itemize}
 \end{itemize}
+
 \subsection{Wiring scheme}
-During the implementation of the system we used the setup seen in figure \ref{schema_bb}. We used batteries to power the system which makes it more flexible to use but results in downtimes when the batteries have to be changed. If a more stable system is desired the batteries can be exchanged with a permanent  connection to a power socket.
+For the implementation of the system we use the setup shown in the figure \ref{schema_bb}. We use  batteries to power the system, which makes it more flexible to use. However it results in downtimes, when the batteries have to be changed. For a more stable system the batteries can be exchanged with a permanent connection to a power socket.
+
 \begin{figure}[]
 	\centering \includegraphics[scale=0.4]{images/schema_bb.png}
 	\caption{Hardware scheme}
 	\label{schema_bb}
 \end{figure}
+
 \subsection{Flow chart of system functionality}
-Following the wiring scheme the execution flow was planned. As seen in figure \ref{flowChart} the parameters regarding the thresholds and the height of the basket the sensor is used in have to be set by the user at the beginning. Afterwards the system enters a loop  until its execution is stopped through a disconnect from the MQTT broker or a loss power supply.
-\begin{figure}[h]
+After the wiring scheme the flow of execution was planned. As shown in the figure \ref{flowChart} the parameters, regarding the thresholds and the height of the basket, have to be set by the user at the start. Afterwards the system begins a loop. It is only stopped through a disconnect from the MQTT broker or through a loss of power supply.
+
+\begin{figure}[]
 		\center \includegraphics[scale=0.6]{flowChart.png}
-		\caption{flow chart of the system}
+		\caption{Flow chart of the system}
 		\label{flowChart}
 \end{figure}
 
+\subsection{Node-RED}
+This section covers the parts of the project running on the central server, which
+mainly includes the homepage created with Node-RED. The flow of the project is shown in the figure \ref{flowScheme}. The simple user interface is shown in the figure \ref{inteface_offline}. The flow consists of four input elements located on the left side. Located in the middle of the flow, there are nodes, which transform the input data. On the right side the output nodes are located.\par
 
+\paragraph{Input nodes}\mbox{}
 
-\subsection{Node-Red}
-This section covers the parts of the project running on the central server which
-mainly includes the homepage created with Node-Red. The flow we created for this
-project can be seen in figure \ref{flowScheme} and the simple user interface in
-figure \ref{inteface_offline}. The flow consists of 4 input elements located on
-the left. Located in the middle of the flow there are nodes transforming the
-input data and on the right all the output nodes are located.\par
-\subsubsection{Input nodes}
-3 out of the 4 input nodes are simple text nodes through which the user can set
-the basket height, lower and higher threshold. All 3 can be changed at any point
-even if the system is running. This may be needed in cases like the liquid in
-the basket changed and due to a higher density the basket can hold less than
-before, the sensor is used in a new basket or similar use cases. The basket
-height has to be set because the used ultrasonic sensor sometimes measures
-faulty values. So the basket height is used to filter them and prevent the
-microcontroller from sending them to the MQTT broker.\par
-The other input node receives MQTT messages from the MQTT broker. It is
-subscribed to the topic \enquote{distance} to which the microcontroller
-publishes the measured distance.
-\subsubsection{Transforming and output nodes}
+Three of the four input nodes are simple text nodes. Through which the user can set perspectively
+the basket height, the lower threshold and the higher threshold. All three can be changed at any point, also if the system is running. This may be needed in cases such as: the liquid in the basket has been changed and due to a higher density the basket can't hold as much as before, the sensor is used in different basket. The basket height should be set because the ultrasonic sensor measures
+faulty values from time to time. With the basket height these values can be filtered and prevent the
+microcontroller from sending them to the MQTT broker.
+
+The fourth input node receives MQTT messages from the MQTT broker. It is subscribed to the topic \enquote{distance}, to which the microcontroller publishes the measured distance.
+
+\paragraph{Transforming and output nodes}\mbox{}
 \label{sec:json}
-The function node called \enquote{Thresholds} checks if the user given
+The function node \enquote{Thresholds} checks if the user given
 thresholds are valid. This means it checks if the lower threshold is lower or
-equal to the higher trehshold and the other way around. If this is the case the
-new values for lower and higher threshold are stored in\verb|conext.low| and
-\verb|context.high|. Furthermore the node returns
-\verb|{payload: {upper: context.high, lower: context.low}}| which is used by the
-two connected text nodes on the right side to show the user the currently set
-thresholds on the homepage.\par
-The function node \enquote{Threshold Check} does the same checks as the previously discussed node and also stores the current threshold values in a similar manner.  Additionally it also stores the last measured distance and uses it to check if one of the two thresholds is surpassed. In the end the object \verb|{payload: {highLed: <boolean>, lowLed: <boolean>,|\\
-    \verb| basketHeight: context.basket}}| is returned where the property
-highLed or respectively lowLed is set to \enquote{true} if the corresponding
-threshold is surpassed. The last property always contains the currently set
-basket height. This is needed because the ultrasonic sensor returns abnormal values at some times. So we use the \verb|basketHeight| to filter out all distance measurements higher than the height of the basket the sensor is used in as these are impossible and definitely false. Afterwards this object is published to the topic
+equal to the higher threshold and vice versa. In these cases the
+new values for lower and higher threshold are stored in \verb|conext.low| and
+\verb|context.high|. The node returns 
+\verb|{payload: {upper: context.high, lower: context.low}}|, which is used by the
+two connected text nodes on the right side to show the user the currently set thresholds on the homepage.
+
+The function node \enquote{Threshold Check} does the same checks as the previously discussed node and also stores the current threshold values in a similar manner.  Additionally it also stores the last measured distance and uses it to check if one of the two thresholds is surpassed. In the end the object \verb|{payload: {highLed: <boolean>, lowLed: <boolean>,| \verb| basketHeight:| \\
+\verb|context.basket}}| is returned where the property 
+highLed or lowLed is respectively set to \enquote{true} if the corresponding
+threshold is surpassed. The last property always contains the current set
+basket height. This is needed because the ultrasonic sensor returns abnormal values time to time. So we use the \verb|basketHeight| to filter the distance measurements higher than the height of the basket as these measurements are not possible and false. Afterwards this object is published to the topic
 \enquote{threshold} as a JSON using MQTT. The microcontroller is subscribed to
 this topic and uses the received values to turn its connected LEDs on or off and
 to filter abnormal measured distances.\par
@@ -216,52 +169,53 @@ the input and returns the object \texttt{\{payload: "high"|"low"|"between"\}}
 where the value is chosen depending on the object given as input. We used this
 so we can simply check for received string in the LED nodes afterwards in the
 flow to determine if the LEDs have be turned off or on.\par
-And finally the two output nodes on the top are used to show the measured
-distances. The text node just shows the last measured distance in centimeters.
+Finally the two output nodes on the top are used to show the measured
+distances. The text node just shows the last measured distance in centimetres.
 The node called \enquote{Distance} is a graph of the measured distances which
 enables the user to see the tendencies in the liquid level and act before
 the critical thresholds are exceeded.
-\subsubsection{User interface}
-The user interface (figure \ref{inteface_offline}) is structured in 3 parts. On
+
+\paragraph{User interface}\mbox{}
+The user interface, shown in the figure \ref{inteface_offline}, is structured in three parts. On
 the left the current status of the system is shown meaning the current
-parameters of basketheight, lower and higher treshold. Also it contains the 3
+parameters of basket height, lower threshold and higher threshold. Also it contains three
 status LEDs signalizing if one of the thresholds is surpassed or if the system
 is in a non-problematic state (shown by the green LED names \enquote{normal}
 being turned on).\par
-In the middle the measurements are shown. This part consists of the last mesured
+In the middle the measurements are shown. This part consists of the last measured
 distance and a graph showing the changes during the last measurements. These
 values can only be seen if a microcontroller with an ultrasonic sensor is
 publishing its data. Otherwise the graph is blank and the message
-\verb|desconnectado| is shown instead of the last measurement.\par
-The right-most part contains all nodes that allow user input. Through these the
-user can set the basket height, lower and higher threshold. This can happen
-dynamically at any time. The changes will be published to the MQTT broker and
-therefore the microcontroller everytime one of the values is changed or after a
-new measurement arrives.
+\verb|desconnectado| is shown instead of a measurement.
+
+The part on the most right contains the nodes that allow user input. Through these the
+user can set the basket height, lower threshold and higher threshold. This can happen
+dynamically at any time. The changes will be published to the MQTT broker. Therefore the microcontroller publishes each time a value is changed or a measurement arrives.
+
 \begin{figure}
-	\centering \includegraphics[scale=1.2]{images/flowScheme.png}
+	\hspace{-1cm}
+	\includegraphics[scale=1.2]{images/flowScheme.png}
 	\caption{Node-Red: Scheme of flow}
 	\label{flowScheme}
 \end{figure}
 
 \begin{figure}
-	\centering \includegraphics[scale=0.25]{images/interface_offline_2.png}
-	\caption{Node-Red: Interface offline}
+	\centering \includegraphics[scale=0.2]{images/interface_offline_2.png}
+	\caption{Node-RED: Interface offline}
 	\label{inteface_offline}
 \end{figure}
 
-\subsection{Micro controller programming}
+\newpage
 
-\subsubsection{Source file}
+\subsection{Micro controller program}
 
-All of the code is contained in the source file \texttt{project.ino}, compiled
-and sent to the \texttt{ESP8266WiFi} microcontroller using \texttt{Arduino IDE}.
+In this part we will discuss the source file of the micro controller programs and its main methods. The code is contained in the source file \texttt{project.ino}, compiled and sent to the \texttt{ESP8266WiFi} microcontroller using \texttt{Arduino IDE}.
 
-\subsubsection{Communication with the sensor}
+\paragraph{Communication with the sensor}\mbox{}
 
 The logic of the distance measurement is implemented in the \verb|loop()|
-function; every half a second, the measurement is done and published on the
-\texttt{MQTT} topic. Since there's no need to publish additional information, the
+function. Every half a second the measurement is done and published on the
+\texttt{MQTT} topic. Since there is no need to publish additional information, the
 data is published as a simple plain text, containing only the number with the
 measurement or a string with an error message.
 
@@ -271,175 +225,75 @@ send a 10 milliseconds-long pulse and measure the time passed.
 The function used to interact with the sensor is
 \verb|digitalWrite(trigPin,flag)|,
 where \texttt{trigPin} is the identifying number pin on the
-microcontroller to which the trigger Pin of the sensor is connected to (see the
-\hyperref[schema_bb]{hardware schema}), and
-\texttt{flag} can be either \texttt{LOW} or \texttt{HIGH}, depending if we want
-to trigger on or off the ultrasonic sensor.
-
-The distance is then calculated with the formula:
+microcontroller to which the trigger Pin of the sensor is connected to, as shown in the \ref{schema_bb}, and \texttt{flag} can be either \texttt{LOW} or \texttt{HIGH}, depending if we want
+to trigger on or off the ultrasonic sensor. The distance is calculated with the formula:
 
 \begin{equation}
 \mathit{Distance} = \frac{\mathit{Time}/2}{29.1}
 \end{equation}
 
-\subsubsection{Communication with the base station}
+\paragraph{Communication with the base station}\mbox{}
 
 The \verb|callback()| function is invoked every time new data is published on
 the topic. In particular, it is programmed to receive the \texttt{JSON} payload
-described in the \hyperref[sec:json]{previous section}; we used the
-\texttt{JSON} parsing library \texttt{ArduinoJson.h} to be able to deserialize
-it. The payload is deserialized and the corresponding LEDs are turned off or on,
-basing on threshold trespassing information. Also the max height of the basket
+described in the previous subsection \ref{sec:json}; we used the
+\texttt{JSON} parsing library \texttt{ArduinoJson.h} to be able to de-serialize
+it. The payload is de-serialized and the corresponding LEDs are turned off or on,
+based on threshold trespassing information. Also the max height of the basket
 can be set this way.
 
 We also check the validity of the received \texttt{JSON}, debugging an error
 message in case of syntax errors in the payload.
 
-\subsubsection{Other functions necessary for device operation}
+\paragraph{Additional functions}\mbox{}
 
 The functions \verb|reconnect()| and \verb|setup_wifi()| check and/or establish
-the connection to the WiFi network. \texttt{reconnect()} is always called at the
-start of every \texttt{loop()} call, to ensure the micro controller is always
-connected.
-
-% \subsubsection{Other technical considerations of the devices not described
-% above}
-
-% something needed here?
-
-% \begin{itemize}
-% \item List of functions used to communicate with the sensors, including input /
-%   output parameters and operation.a
-% \item List of functions that will be used to communicate with the base station,
-%   including input / output parameters and operation.
-% \item Other functions necessary for device operation
-% \item Other technical considerations of the devices not described above.
-% \end{itemize}
-
-\section{Power Consumption}
-During the last class we measured the power consumption of the system. The
-measurement happenend over a duration of $8.3$ seconds and the results can be
-seen in figure \ref{chart_power}.\par
-As seen in the graph the startup probably lasted around 3 seconds. In the
-beginning of it there are several spikes in power consumption. They could be the
-result of initial processes but we can't know for sure what is going on inside
-the ESP module. During $2.5$ and $3$ seconds there is a generally higher power
-consumption without big spikes. We think this is the period of time during which
-the ESP tries to establish a Wifi connection. Due to constant package traffic
-during this time a higher consumption could result.\par
-Afterwards there are a lot of spikes in power consumption which probably
-happened because the microcontroller periodically sends and receives data from
-the sensor which is sent together with other packages via Wifi. Another reason
-could also be if the connected LEDs are turned on or off but this is hard to
-tell given only this sample.\par
-If one wants to minimize the power consumption of the system, one could lower
-the frequency of mesurements performed by the sensor and therefore also the
-frequency of data exchange between the MQTT broker and the microcontroller. Also
-if the LEDs connected to the microcontroller aren't needed (because they are not
-visible or not important at the basket) they should be removed, so that the
-system becomes more efficient.
-
-\begin{figure}[]
-	\centering \includegraphics[scale=0.5]{images/chart.png}
-	\caption{graph of power consumption (until 8 seconds after startup)}
-	\label{chart_power}
-\end{figure}
-\section{User manual and setup}
-The system can be set up in a few simple steps. The main prerequisite for a successful setup is a stable Wifi over which the MQTT messages can be sent to and received from the MQTT broker. The login has to be configured in the code for the microcontroller as well as for the Node-Red homepage.\par 
-Afterwards the microcontroller has to be connected to a power source and the ultrasonic sensor has to be fixed to the top of the container in which it's used pointing downwards towards the liquid stored in the basket. The rest of the hardware should be placed outside of the basket to prevent possible damage from the liquid and to make the warning LEDs easily visible.\par 
-As soon as the microcontroller is connected to a power supply it tries to connect to the given Wifi. If this is successful it starts measuring the height and sending the data to the MQTT broker. If Node-Red is running on the central server hosting our homepage it will start communicating with the MQTT broker as soon as the receiving and sending node are configured using the correct credentials.\par 
-Once this initial setup is done the system should be running and the thresholds and the basket height can be set or dynamically changed to use the full spectrum of features.\par 
-In case the microcontroller disconnects from the MQTT broker unexpectedly the message \verb|Desconectado| is shown instead of the last measured distance. In this case the established connection should be checked as well as the microcontroller at the basket because it may have lost power. In case the error is more complex the Arduino IDE can be used as the system does extensive logging.
+the connection to the Wi-Fi network. \texttt{reconnect()} is always called at the
+start of every \texttt{loop()} call, to ensure the micro controller is connected at all times.
 
 \newpage
 
-\section{Conclusions}
-Through this project we were able to learn certain difficulties and also
-advantages of the ... There was new insight in how JSON BLA BLA In the future it
-would be interesting to study the capability of interconnecting with other
-devices and creating a more broad network of devices. Obviously it makes sense
-to work with: ...
+\section{User manual}
 
-\begin{comment}
-  Project : Height / capacity monitor Using an ultrasonic sensor or similar,
-  monitor the height of a water tank, paper stack, garbage container, or
-  similar. Think of multiple sensors to map the height in different positions of
-  the container or different containers. To properly manage the filling /
-  emptying of the container, monitoring the tank capacity, etc. Local warning by
-  LEDs, minimum / maximum level alarms, etc.
+\subsection{Setup}
+The system can be set up in a few simple steps. The main prerequisite for a successful setup is a stable Wi-Fi connection over which the MQTT messages can be sent to and received from the MQTT broker. The login has to be configured in the code for the microcontroller as well as for the Node-RED homepage.\par 
+Afterwards the microcontroller has to be connected to a power source and the ultrasonic sensor has to be fixed to the top of the container in which it's used pointing downwards towards the liquid stored in the basket. The rest of the hardware should be placed outside of the basket to prevent possible damage from the liquid and to make the warning LEDs easily visible.\par 
+As soon as the microcontroller is connected to a power supply it tries to connect to the given Wi-Fi connection. If this is successful, it starts measuring the height and sending the data to the MQTT broker. When Node-RED is running on the central server hosting our homepage, it will start communicating with the MQTT broker as soon as the receiving and sending node are configured using the correct credentials.\par 
+Once this initial setup is done the system should be running and the thresholds and the basket height can be set and dynamically changed to use the full spectrum of features.\par 
+In case the microcontroller disconnects from the MQTT broker unexpectedly the message \verb|Desconectado| is shown instead of the last measured distance. In this case the established connection should be checked as well as the microcontroller at the basket because it may have lost power. In case the error is more complex, the Arduino IDE can be used as the system does extensive logging.
 
-  How is the document going to be valued?
+\subsection{Power Consumption}
+During the class we measured the power consumption of the system. The
+measurement happened over a duration of $8.3$ seconds and the results can be
+seen in the figure \ref{chart_power}.\par
+As seen in the graph the start-up lasted around 3 seconds. In the
+beginning of it there are several spikes in power consumption. They could be the
+result of initial processes but we do not know exactly what is going on the inside of
+the ESP module. During $2.5$ and $3$ seconds there is a generally higher power
+consumption without high spikes. It can be explained that this is the period of time during which
+the ESP tries to establish a Wi-Fi connection. Due to constant package traffic
+it could result in a higher consumption.\par
+Afterwards there are a lot of spikes in power consumption which could have
+happened because the microcontroller periodically sends and receives data from
+the sensor, which is sent together with the other packages via Wi-Fi connection. Another possibility is if the connected LEDs are turned on or off, but this is hard to
+tell given the sample.\par
 
-  Well written and clear Good: The document has no misspellings, and a simple
-  language is used that is perfectly understood. The document is careful: it
-  looks nice, the sheets, drawings, etc., are numbered, the different sections
-  are clearly marked. It shows that they have taken it seriously. Enough: The
-  document is understood quite well, although there is some part that can be
-  improved. I found some error, probably attributable to a mistake. With a
-  little more effort, it could have been better. Insufficient: I have found
-  several spelling mistakes, and I have not understood many of the things that
-  are said in the document. The document is quite neglected. It shows that they
-  have not tried very hard.
+If we want to minimize the power consumption of the system, we could lower
+the frequency of measurements performed by the sensor. Therefore the
+frequency of data exchange between the MQTT broker and the microcontroller lowers. Furthermore if the LEDs connected to the microcontroller are not needed, because perhaps they are not
+visible or not important for the basket. Then they can be removed, so that the
+system is more efficient.
 
+\begin{figure}[]
+\centering \includegraphics[scale=0.5]{images/chart.png}
+\caption{graph of power consumption (until 8 seconds after start-up)}
+\label{chart_power}
+\end{figure}
 
-  Adequate content Good: The document includes complete information on all the
-  points that were requested. They also explain and briefly justify the
-  decisions made. Enough: The document includes all the points, but the
-  information is not complete in no more than three of them, or some point is
-  missing. I see some dark aspects in the description of some point. Some key
-  decisions are not justified Insufficient: More than one point is missing or
-  the description is quite incomplete
+\section{Summary}
+Through this project we have implemented a working system, which is able to monitor the height and capacity of a container. This document discusses the steps of our project and its functional details. Through this project we were able to learn a lot of different tools and methods to develop such a system. There are many advantages of using IoT devices in the daily life and it will be exciting to see, how it will develop further.
 
-
-  Good and effective approach Good: The approach is good. I can't think of many
-  improvements. The scheme and operation is clear and reasonable. The functions
-  that will be used are well described, with a clear comment on what they do.
-  With this information I think that I would have no difficulty in making the
-  design myself. Enough: I think the proposal is good although it admits some
-  improvements. I understand well what they want to do, but if I had to
-  implement it, I would have to ask for some additional clarification.
-  Insufficient: The approach is not good. I do not understand the purpose or
-  need of some of the elements of the structures, or of some of the procedures
-  and functions. If I had to implement the application, with this information I
-  would not know where to start.
-
-\end{comment}
-
-\begin{comment}
-  \maketitle
-  \newpage
-
-  \pagenumbering{arabic} %show page numbers in arabic
-  \tableofcontents % from the section headings
-  \newpage
-
-  \listoffigures
- 
-  \listoftables
-
-  % \listoftables
-  \newpage
-
-  \subfile{einleitung/einleitung}
-  \newpage
-
-  \subfile{grundlagen/grundlagen}
-  \newpage
-
-  \subfile{analyse/analyse}
-  \newpage
-
-  \printbibliography
-
-  \subfile{entwicklung/entwicklung}
-  \newpage
-
-  \subfile{evaluation/evaluation}
-  \newpage
-
-  \subfile{zusammenfassungundausblick/zusammenfassungundausblick}
-  \newpage
-
-\end{comment}
+In the future it would be interesting to study the capability of interconnecting with other
+devices and creating a more broad network of devices. It is very well imaginable, that the future homes and workplaces will be packed with IoT technology.
 
 \end{document}
