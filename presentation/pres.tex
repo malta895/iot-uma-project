@@ -47,6 +47,25 @@
 \end{figure}
 \end{frame}
 
+\begin{frame}{Micro controller program}
+  Communication with the ultrasonic sensor
+  \begin{itemize}
+  \item implemented in the \texttt{loop()} function
+  \item sensor is triggered with \texttt{digitalWrite(trigPin, LOW)} and
+    \texttt{digitalWrite(trigPin, HIGH)}
+  \item then the value is read with \texttt{pulseIn(echoPin, HIGH)} and the distance
+    calculated basing on the time passed
+  \end{itemize}
+  Communication with the base station
+  \begin{itemize}
+    \item implemented in the \texttt{callback()} function, which overrides the
+      one in Arduino libraries
+    \item the \texttt{JSON} with thresholds information is received and parsed
+    \item \texttt{LED}s are switched on/off accordingly
+  \end{itemize}
+\end{frame}
+
+
 \begin{frame}{Node-Red Flow}
 \begin{figure}
 \hspace*{-0.6cm}\includegraphics[scale=1.1]{pic/flowScheme.png}
@@ -55,15 +74,12 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{Show Code}
-explain important functions of written cod
-\end{frame}
-
 \begin{frame}{Limitations}
 \begin{itemize}
 \item measurement fluctuations of the sensor $\to$ not reasonable values have to be filtered
 \item needs constant Wifi connection between central computer and ESP to recognize thresholds
 \item energy consumption scales with frequency of measurements
+\item Battery should be changed/charged periodically
 \end{itemize}
 \end{frame}
 
