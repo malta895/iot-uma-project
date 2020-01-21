@@ -24,6 +24,12 @@
 %\tableofcontents
 %\end{frame}
 
+%functionality
+%actions to save energy and make the system robust
+%explain and show general implementation
+%What doesn't work and possible problems
+%questions
+
 \begin{frame}{Overview}
 \begin{itemize}
 \item design of a system to check level of fluid in a basket
@@ -41,18 +47,23 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}{Node-Red interface}
-add interface here (or points you want to say)
+\begin{frame}{Node-Red Flow}
+\begin{figure}
+\hspace*{-0.6cm}\includegraphics[scale=1.1]{pic/flowScheme.png}
+\caption{Node-Red flow}
+\label{flow}
+\end{figure}
 \end{frame}
 
 \begin{frame}{Show Code}
 explain important functions of written cod
 \end{frame}
 
-\begin{frame}{Limitation}
+\begin{frame}{Limitations}
 \begin{itemize}
 \item measurement fluctuations of the sensor $\to$ not reasonable values have to be filtered
 \item needs constant Wifi connection between central computer and ESP to recognize thresholds
+\item energy consumption scales with frequency of measurements
 \end{itemize}
 \end{frame}
 
