@@ -32,7 +32,7 @@ boolean led_lower_on = false;
 boolean led_upper_on = false;
 
 //BASKET HEIGHT
-double basket_height = 50.;
+unsigned int basket_height = 50;
 
 char mqtt_cliente[50];
 
@@ -135,9 +135,9 @@ void callback(const char* topic, byte* payload, unsigned int length) {
   Serial.printf("Upper threshold overtaken: %d\n", led_upper_on);
 
   //get the basket height
-  if(!topic_json_document["basketHeight"].isNull()){
-    basket_height = (float) topic_json_document["basketHeight"];
-    Serial.printf("Basket height: %f cm\n", basket_height);
+  if(!topic_json_document["basketHeight"].isNull() && topic_json_document["basketHeight"] != 0){
+    basket_height = (unsigned int) topic_json_document["basketHeight"];
+    Serial.printf("Basket height: %d cm\n", basket_height);
   }
 
   free(topic_json); // we read the string, we can now free the memory
@@ -207,7 +207,7 @@ void loop()
     client.publish(mqtt_distance, distance_str, true);
   } else {
     printf("Anomalous value: %d cm\n", distance);
-    printf("Basket height is set to: %f cm\n", basket_height);
+    printf("Basket height is set to: %d cm\n", basket_height);
   }
 
   delay(500);
